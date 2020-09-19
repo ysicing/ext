@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/ysicing/ext/e"
 	"github.com/ysicing/ext/ginmid"
 	"github.com/ysicing/ext/logger"
 	"go.uber.org/zap/zapcore"
 	"log"
-	"net/http"
 	"runtime"
 	"time"
 )
@@ -40,12 +40,12 @@ func main() {
 
 	// Example ping request.
 	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong "+fmt.Sprint(time.Now().Unix()))
+		c.JSON(200, e.Done("pong "+fmt.Sprint(time.Now().Unix())))
 	})
 
 	// Example / request.
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "id:"+ginmid.GetRequestID(c))
+		c.JSON(200, e.Done("id:"+ginmid.GetRequestID(c)))
 	})
 
 	// Example /metrics
@@ -53,12 +53,12 @@ func main() {
 
 	// Example status 500
 	r.GET("/err500", func(c *gin.Context) {
-		c.String(http.StatusBadGateway, "id:"+ginmid.GetRequestID(c))
+		c.JSON(500, e.Done("id:"+ginmid.GetRequestID(c)))
 	})
 
 	r.GET("/panic", func(c *gin.Context) {
 		panic(1)
-		c.String(http.StatusBadGateway, "id:"+ginmid.GetRequestID(c))
+		c.JSON(500, e.Done("id:"+ginmid.GetRequestID(c)))
 	})
 
 	// Listen and Server in 0.0.0.0:8080
