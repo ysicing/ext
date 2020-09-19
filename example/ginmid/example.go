@@ -36,7 +36,7 @@ func main() {
 	// gin.DisableConsoleColor()
 	r := gin.New()
 
-	r.Use(mid.RequestID(), mid.PromMiddleware(nil), mid.Log(), mid.Recovery())
+	r.Use(ginmid.RequestID(), ginmid.PromMiddleware(nil), ginmid.Log(), ginmid.Recovery())
 
 	// Example ping request.
 	r.GET("/ping", func(c *gin.Context) {
@@ -45,20 +45,20 @@ func main() {
 
 	// Example / request.
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "id:"+mid.GetRequestID(c))
+		c.String(http.StatusOK, "id:"+ginmid.GetRequestID(c))
 	})
 
 	// Example /metrics
-	r.GET("/metrics", mid.PromHandler(promhttp.Handler()))
+	r.GET("/metrics", ginmid.PromHandler(promhttp.Handler()))
 
 	// Example status 500
 	r.GET("/err500", func(c *gin.Context) {
-		c.String(http.StatusBadGateway, "id:"+mid.GetRequestID(c))
+		c.String(http.StatusBadGateway, "id:"+ginmid.GetRequestID(c))
 	})
 
 	r.GET("/panic", func(c *gin.Context) {
 		panic(1)
-		c.String(http.StatusBadGateway, "id:"+mid.GetRequestID(c))
+		c.String(http.StatusBadGateway, "id:"+ginmid.GetRequestID(c))
 	})
 
 	// Listen and Server in 0.0.0.0:8080

@@ -1,7 +1,7 @@
 // MIT License
 // Copyright (c) 2020 ysicing <i@ysicing.me>
 
-package mid
+package ginmid
 
 import (
 	"github.com/gin-gonic/gin"
