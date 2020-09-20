@@ -7,6 +7,7 @@ import (
 	"github.com/ysicing/ext/logger"
 	"github.com/ysicing/ext/utils/extime"
 	"go.uber.org/zap/zapcore"
+	"log"
 )
 
 func demohook() func(entry zapcore.Entry) error {
@@ -14,7 +15,7 @@ func demohook() func(entry zapcore.Entry) error {
 		if entry.Level < zapcore.ErrorLevel {
 			return nil
 		}
-		logger.Slog.Debug("debug hook")
+		log.Println("debug hook")
 		return nil
 	}
 }
@@ -30,5 +31,5 @@ func main() {
 	logger.Log.Sugar().Debug("1", 2, 3, extime.GetToday())
 	logger.Slog.Info("info")
 	logger.Slog.Error("error")
-	logger.Exit("error exit")
+	logger.Slog.Exit("exit")
 }

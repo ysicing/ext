@@ -18,3 +18,5 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
+
+replace go.uber.org/zap v1.16.0 => github.com/BeidouCloudPlatform/zap v1.16.1-0.20200920000145-0c42617516b3

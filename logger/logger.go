@@ -32,7 +32,10 @@ func InitLogger(cfg *LogConfig) {
 		return level >= zap.ErrorLevel
 	})
 	debugPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
-		return level < zap.ErrorLevel && level >= zap.DebugLevel
+		return level < zap.InfoLevel
+	})
+	customPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+		return level >= zap.InfoLevel && level < zap.ErrorLevel
 	})
 	if cfg.Simple {
 		writeSyncer := getLogWriterSimple()                                                                                        // 写日志
@@ -44,7 +47,8 @@ func InitLogger(cfg *LogConfig) {
 	//writeSyncer := getLogWriter() // 写日志
 	errCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(getLogWriter("err"), zapcore.AddSync(os.Stdout)), errPriority)
 	debugCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(getLogWriter("debug"), zapcore.AddSync(os.Stdout)), debugPriority)
-	Log = zap.New(zapcore.NewTee(debugCore, errCore)).WithOptions(cfg.debugMode()...)
+	customCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(getLogWriter("custom"), zapcore.AddSync(os.Stdout)), customPriority)
+	Log = zap.New(zapcore.NewTee(debugCore, customCore, errCore)).WithOptions(cfg.debugMode()...)
 	Slog = Log.Sugar()
 }
 
@@ -98,24 +102,4 @@ func getLogWriterSimple() zapcore.WriteSyncer {
 		Compress:   DefaultCompress,
 	}
 	return zapcore.AddSync(lumberJackLogger)
-}
-
-func tpl(template string, fmtArgs ...interface{}) string {
-	msg := template
-	if msg == "" && len(fmtArgs) > 0 {
-		msg = fmt.Sprint(fmtArgs...)
-	} else if msg != "" && len(fmtArgs) > 0 {
-		msg = fmt.Sprintf(template, fmtArgs...)
-	}
-	return msg
-}
-
-func Exit(msg ...interface{}) {
-	Log.Sugar().Error(msg, "\t === err exit === \n")
-	os.Exit(0)
-}
-
-func Exitf(template string, fmtArgs ...interface{}) {
-	Log.Sugar().Error(tpl(template, fmtArgs), "\t === err exit === \n")
-	os.Exit(0)
 }

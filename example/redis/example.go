@@ -17,6 +17,6 @@ func main() {
 	status, err = RCClient.RCReSet("hahaha", "h", 10)
 	logger.Slog.Debug(status, err)
 	status, err = RCClient.RCDel("ha")
-	logger.Exit(status, err)
+	logger.Slog.Exit(status, err)
 	defer RCClient.Close()
 }

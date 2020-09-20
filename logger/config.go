@@ -12,6 +12,7 @@ type LogConfig struct {
 	Simple     bool
 	HookFunc   func(zapcore.Entry) error
 	JsonFormat bool
+	CallerSkip bool
 }
 
 func (cfg *LogConfig) debugMode() []zap.Option {
@@ -20,7 +21,11 @@ func (cfg *LogConfig) debugMode() []zap.Option {
 	// AddStacktrace 输出堆栈
 	var cfgopts []zap.Option
 	if !cfg.Simple {
-		cfgopts = append(cfgopts, zap.AddCaller(), zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
+		cfgopts = append(cfgopts, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+	}
+
+	if cfg.CallerSkip {
+		cfgopts = append(cfgopts, zap.AddCallerSkip(1))
 	}
 
 	if cfg.HookFunc != nil {
