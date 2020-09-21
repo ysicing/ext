@@ -5,8 +5,8 @@ package ginmid
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kunnos/zap"
 	"github.com/ysicing/ext/logger"
-	"go.uber.org/zap"
 	"net"
 	"net/http"
 	"net/http/httputil"

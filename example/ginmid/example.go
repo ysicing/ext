@@ -6,11 +6,11 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/kunnos/zap/zapcore"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/ysicing/ext/e"
 	"github.com/ysicing/ext/ginmid"
 	"github.com/ysicing/ext/logger"
-	"go.uber.org/zap/zapcore"
 	"log"
 	"runtime"
 	"time"

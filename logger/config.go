@@ -4,8 +4,8 @@
 package logger
 
 import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"github.com/kunnos/zap"
+	"github.com/kunnos/zap/zapcore"
 )
 
 type LogConfig struct {

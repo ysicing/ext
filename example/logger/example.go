@@ -4,9 +4,9 @@
 package main
 
 import (
+	"github.com/kunnos/zap/zapcore"
 	"github.com/ysicing/ext/logger"
 	"github.com/ysicing/ext/utils/extime"
-	"go.uber.org/zap/zapcore"
 	"log"
 )
 
@@ -31,5 +31,6 @@ func main() {
 	logger.Log.Sugar().Debug("1", 2, 3, extime.GetToday())
 	logger.Slog.Info("info")
 	logger.Slog.Error("error")
-	logger.Slog.Exit("exit")
+	//logger.Slog.Exit(0, "exit")
+	logger.Slog.Exit(-1, "exit")
 }

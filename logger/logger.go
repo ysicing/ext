@@ -5,10 +5,10 @@ package logger
 
 import (
 	"fmt"
+	"github.com/kunnos/zap"
+	"github.com/kunnos/zap/zapcore"
 	"github.com/ysicing/ext/utils/exos"
 	"github.com/ysicing/ext/utils/extime"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"time"
