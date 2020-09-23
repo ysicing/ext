@@ -8,9 +8,10 @@ import (
 )
 
 // GetEnv 获取环境变量
-func GetEnv(envstr, fallback string) string {
-	if e := os.Getenv(envstr); e != "" {
-		return e
+func GetEnv(envstr string, fallback ...string) string {
+	e := os.Getenv(envstr)
+	if e == "" && len(fallback) > 0 {
+		e = fallback[0]
 	}
-	return fallback
+	return e
 }

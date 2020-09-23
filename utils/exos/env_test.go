@@ -20,4 +20,8 @@ func TestEnvString(t *testing.T) {
 
 	key = "FLOCKER_UNSET_VAR"
 	assert.Equal(expected, GetEnv(key, expected))
+
+	t.Logf("env $HOME %v", GetEnv("HOME"))
+	t.Logf("env $HOME %v", GetEnv("HOME1", "/root"))
+
 }
