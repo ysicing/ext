@@ -12,16 +12,19 @@ import (
 	"github.com/ysicing/ext/ginmid"
 	"github.com/ysicing/ext/logger"
 	"log"
-	"runtime"
 	"time"
 )
 
 func demohook() func(entry zapcore.Entry) error {
 	return func(entry zapcore.Entry) error {
-		if entry.Level < zapcore.ErrorLevel {
+		if entry.Level >= zapcore.ErrorLevel {
+			log.Println("err hook")
 			return nil
 		}
-		log.Println(runtime.GOOS)
+		if entry.Level == zapcore.HookLevel {
+			log.Println("hook hook")
+			return nil
+		}
 		return nil
 	}
 }
@@ -32,7 +35,7 @@ func init() {
 }
 
 func main() {
-	// gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 	// gin.DisableConsoleColor()
 	r := gin.New()
 
@@ -62,5 +65,6 @@ func main() {
 	})
 
 	// Listen and Server in 0.0.0.0:8080
+	logger.Slog.Hook("startup")
 	r.Run(":8080")
 }

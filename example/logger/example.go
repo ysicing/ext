@@ -12,10 +12,14 @@ import (
 
 func demohook() func(entry zapcore.Entry) error {
 	return func(entry zapcore.Entry) error {
-		if entry.Level < zapcore.ErrorLevel {
+		if entry.Level == zapcore.ErrorLevel {
+			log.Println("err hook")
 			return nil
 		}
-		log.Println("debug hook")
+		if entry.Level == zapcore.HookLevel {
+			log.Println("hook hook")
+			return nil
+		}
 		return nil
 	}
 }
@@ -31,6 +35,7 @@ func main() {
 	logger.Log.Sugar().Debug("1", 2, 3, extime.GetToday())
 	logger.Slog.Info("info")
 	logger.Slog.Error("error")
+	logger.Slog.Hook("hook")
 	//logger.Slog.Exit(0, "exit")
 	logger.Slog.Exit(-1, "exit")
 }
