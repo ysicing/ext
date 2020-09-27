@@ -28,3 +28,19 @@ func TestGetMonthDayNum(t *testing.T) {
 		t.Logf("year: %v, month: %v, days: %v", month["year"], month["month"], GetMonthDayNum(month["year"], month["month"]))
 	}
 }
+
+func TestGetMonthStartEndUnix(t *testing.T) {
+	months := []map[string]string{
+		{"year": "2020", "month": "1"},
+		{"year": "2020", "month": "2"},
+		{"year": "2020", "month": "3"},
+		{"year": "2020", "month": "4"},
+		{"year": "2004", "month": "2"},
+		{"year": "2003", "month": "2"},
+		{"year": "2019", "month": "12"},
+	}
+	for _, month := range months {
+		st, et := GetMonthStartEndUnix(month["year"], month["month"])
+		t.Logf("year: %v, month: %v, st: %v (%v) et: %v (%v)", month["year"], month["month"], st, UnixInt642String(st), et, UnixInt642String(et))
+	}
+}

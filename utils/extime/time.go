@@ -4,6 +4,7 @@
 package extime
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -180,4 +181,21 @@ func IsLeapYear(year int) bool { //y == 2000, 2004
 		return true
 	}
 	return false
+}
+
+// 时间转时间戳
+func TimeToUninx(t string) int64 {
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	tt, _ := time.ParseInLocation("2006-01-02 15:04:05", t, loc) //2006-01-02 15:04:05是转换的格式如php的"Y-m-d H:i:s"
+	return tt.Unix()
+}
+
+// 某月开始和结束时间戳
+func GetMonthStartEndUnix(year, month string) (int64, int64) {
+	if convert.Str2Int(month) < 10 {
+		month = fmt.Sprintf("0%v", month)
+	}
+	st := fmt.Sprintf("%v-%v-01 00:00:00", year, month)
+	et := fmt.Sprintf("%v-%v-%v 23:59:59", year, month, GetMonthDayNum(year, month))
+	return TimeToUninx(st), TimeToUninx(et)
 }
