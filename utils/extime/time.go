@@ -157,3 +157,27 @@ func NowAddUnix2Str(key string, value time.Duration) string {
 	}
 	return time.Now().Add(time.Hour * value).String()
 }
+
+// GetMonthDayNum 获取任已一年月的天数
+func GetMonthDayNum(year, month string) int {
+	switch month {
+	case "1", "3", "5", "7", "8", "10", "12":
+		return 31
+	case "4", "6", "9", "11":
+		return 30
+	default:
+		if IsLeapYear(convert.Str2Int(year)) {
+			return 29
+		}
+		return 28
+	}
+}
+
+//判断是否为闰年
+func IsLeapYear(year int) bool { //y == 2000, 2004
+	//判断是否为闰年
+	if year%4 == 0 && year%100 != 0 || year%400 == 0 {
+		return true
+	}
+	return false
+}
