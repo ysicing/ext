@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.0 // indirect
 	github.com/gomodule/redigo v1.8.2
 	github.com/google/uuid v1.1.2
-	github.com/kunnos/zap v1.16.0-third
+	github.com/kunnos/zap v0.0.0-20201004105532-2bb6b0fc10a0
 	github.com/mattn/go-sqlite3 v1.14.4 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.9.1
