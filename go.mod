@@ -3,20 +3,24 @@ module github.com/ysicing/ext
 go 1.15
 
 require (
+	github.com/coreos/bbolt v1.3.3 // indirect
+	github.com/coreos/etcd v3.3.12+incompatible
 	github.com/gin-gonic/gin v1.6.3
-	github.com/go-playground/validator/v10 v10.3.0 // indirect
+	github.com/go-playground/validator/v10 v10.4.0 // indirect
 	github.com/gomodule/redigo v1.8.2
 	github.com/google/uuid v1.1.2
-	github.com/kunnos/zap v0.0.0-20200924065313-0a1ad285b411
+	github.com/kunnos/zap v1.16.0-third
+	github.com/mattn/go-sqlite3 v1.14.4 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.7.1
 	github.com/prometheus/common v0.13.0 // indirect
-	github.com/stretchr/testify v1.5.1
-	github.com/ugorji/go v1.1.8 // indirect
-	go.uber.org/multierr v1.6.0 // indirect
-	golang.org/x/sys v0.0.0-20200918174421-af09f7315aff // indirect
+	github.com/stretchr/testify v1.6.1
+	github.com/ugorji/go v1.1.10 // indirect
+	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0 // indirect
+	golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/sqlite v1.1.3
-	gorm.io/gorm v1.20.1
+	gorm.io/gorm v1.20.2
 )

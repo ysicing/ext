@@ -10,4 +10,7 @@ go get -u github.com/ysicing/ext/...
 - retry
 - ginmid 
 - redis
+- etcd
 - utils
+- e
+- exlog
