@@ -6,6 +6,7 @@ package sshutil
 import (
 	"bufio"
 	"github.com/ysicing/ext/logger"
+	"github.com/ysicing/ext/utils/exmisc"
 	"io"
 	"strings"
 )
@@ -43,14 +44,14 @@ func readPipe(host string, pipe io.Reader, isErr bool) {
 		if line == nil {
 			return
 		} else if err != nil {
-			logger.Slog.Infof("[%s] %s", host, line)
-			logger.Slog.Errorf("[ssh] [%s] %s", host, err)
+			logger.Slog.Infof("[%s] %s", exmisc.SGreen(host), line)
+			logger.Slog.Errorf("[ssh] [%s] %s", exmisc.SRed(host), err)
 			return
 		} else {
 			if isErr {
-				logger.Slog.Errorf("[%s] %s", host, line)
+				logger.Slog.Errorf("[%s] %s", exmisc.SRed(host), line)
 			} else {
-				logger.Slog.Infof("[%s] %s", host, line)
+				logger.Slog.Infof("[%s] %s", exmisc.SGreen(host), line)
 			}
 		}
 	}
