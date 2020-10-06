@@ -21,4 +21,7 @@ func main() {
 	if err := ssh.CmdAsync("10.147.20.45:22", "w"); err != nil {
 		logger.Slog.Error(err.Error())
 	}
+	if err := ssh.CmdAsync("10.147.20.45:22", "w", true); err != nil {
+		logger.Slog.Error(err.Error())
+	}
 }

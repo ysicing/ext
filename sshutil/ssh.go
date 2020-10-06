@@ -5,6 +5,7 @@ package sshutil
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/ysicing/ext/logger"
 	"github.com/ysicing/ext/utils/exmisc"
 	"io"
@@ -37,7 +38,7 @@ func (ss *SSH) Cmd(host string, cmd string) []byte {
 	return b
 }
 
-func readPipe(host string, pipe io.Reader, isErr bool) {
+func readPipe(host string, pipe io.Reader, isErr bool, debugmsg ...bool) {
 	r := bufio.NewReader(pipe)
 	for {
 		line, _, err := r.ReadLine()
@@ -49,16 +50,26 @@ func readPipe(host string, pipe io.Reader, isErr bool) {
 			return
 		} else {
 			if isErr {
-				logger.Slog.Errorf("[%s] %s", exmisc.SRed(host), line)
+				if len(debugmsg) > 0 && debugmsg[0] {
+					logger.Slog.Errorf("[%s] %s", exmisc.SRed(host), line)
+				} else {
+					msg, _ := fmt.Printf("%s", line)
+					fmt.Println(msg)
+				}
 			} else {
-				logger.Slog.Infof("[%s] %s", exmisc.SGreen(host), line)
+				if len(debugmsg) > 0 && debugmsg[0] {
+					logger.Slog.Infof("[%s] %s", exmisc.SGreen(host), line)
+				} else {
+					msg, _ := fmt.Printf("%s", line)
+					fmt.Println(msg)
+				}
 			}
 		}
 	}
 }
 
-func (ss *SSH) CmdAsync(host string, cmd string) error {
-	logger.Slog.Infof("[ssh][%s] %s", host, cmd)
+func (ss *SSH) CmdAsync(host string, cmd string, debugmsg ...bool) error {
+	fmt.Printf("[ssh][%s] ➜   %s\n", exmisc.SGreen(host), cmd)
 	session, err := ss.Connect(host)
 	if err != nil {
 		logger.Slog.Errorf("[ssh][%s]Error create ssh session failed,%s", host, err)
@@ -82,11 +93,11 @@ func (ss *SSH) CmdAsync(host string, cmd string) error {
 	doneout := make(chan bool, 1)
 	doneerr := make(chan bool, 1)
 	go func() {
-		readPipe(host, stderr, true)
+		readPipe(host, stderr, true, debugmsg...)
 		doneerr <- true
 	}()
 	go func() {
-		readPipe(host, stdout, false)
+		readPipe(host, stdout, false, debugmsg...)
 		doneout <- true
 	}()
 	<-doneerr
