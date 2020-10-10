@@ -5,6 +5,7 @@ package exos
 
 import (
 	"github.com/ysicing/ext/utils/exfile"
+	ou "os/user"
 	"runtime"
 )
 
@@ -35,4 +36,22 @@ func IsUnix() bool {
 // IsContainer 是否是容器
 func IsContainer() bool {
 	return exfile.CheckFileExistsv2("/.dockerenv")
+}
+
+// GetUserName 获取当前系统登录用户
+func GetUserName() string {
+	user, err := ou.Current()
+	if err != nil {
+		return ""
+	}
+	return user.Username
+}
+
+// GetUser 获取当前系统登录用户
+func GetUser() *ou.User {
+	user, err := ou.Current()
+	if err != nil {
+		return nil
+	}
+	return user
 }
