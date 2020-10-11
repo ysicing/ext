@@ -53,15 +53,13 @@ func readPipe(host string, pipe io.Reader, isErr bool, debugmsg ...bool) {
 				if len(debugmsg) > 0 && debugmsg[0] {
 					logger.Slog.Errorf("[%s] %s", exmisc.SRed(host), line)
 				} else {
-					msg, _ := fmt.Printf("%s", line)
-					fmt.Println(msg)
+					fmt.Println(string(line))
 				}
 			} else {
 				if len(debugmsg) > 0 && debugmsg[0] {
 					logger.Slog.Infof("[%s] %s", exmisc.SGreen(host), line)
 				} else {
-					msg, _ := fmt.Printf("%s", line)
-					fmt.Println(msg)
+					fmt.Println(string(line))
 				}
 			}
 		}
