@@ -12,4 +12,5 @@ func TestOS(t *testing.T) {
 	t.Logf("container %t", IsContainer())
 	t.Logf("user %v", GetUser())
 	t.Logf("username %v", GetUserName())
+	t.Logf("hostname %v", GetHostname()[0])
 }

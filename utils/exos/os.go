@@ -5,6 +5,7 @@ package exos
 
 import (
 	"github.com/ysicing/ext/utils/exfile"
+	"os"
 	ou "os/user"
 	"runtime"
 )
@@ -54,4 +55,12 @@ func GetUser() *ou.User {
 		return nil
 	}
 	return user
+}
+
+func GetHostname() []string  {
+	host, err := os.Hostname()
+	if err != nil {
+		return nil
+	}
+	return []string{host}
 }
