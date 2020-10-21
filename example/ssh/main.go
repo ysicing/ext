@@ -25,8 +25,8 @@ func main() {
 		logger.Slog.Error(err.Error())
 	}
 	ssh2 := sshutil.SSH{
-		User:       "root",
-		Password:   "vagrant",
+		User:     "root",
+		Password: "vagrant",
 	}
 	if err := ssh2.CmdAsync("11.11.11.11:22", "w"); err != nil {
 		logger.Slog.Error(err.Error())

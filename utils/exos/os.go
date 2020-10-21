@@ -57,7 +57,7 @@ func GetUser() *ou.User {
 	return user
 }
 
-func GetHostname() []string  {
+func GetHostname() []string {
 	host, err := os.Hostname()
 	if err != nil {
 		return nil
