@@ -44,3 +44,14 @@ func pathAddSlash(path string, addSlash ...bool) string {
 	}
 	return path
 }
+
+// Rmdir rmdir,support to keep the current directory
+func Rmdir(path string, notIncludeSelf ...bool) (ok bool) {
+	realPath := RealPath(path)
+	err := os.RemoveAll(realPath)
+	ok = err == nil
+	if ok && len(notIncludeSelf) > 0 && notIncludeSelf[0] {
+		_ = os.Mkdir(path, os.ModePerm)
+	}
+	return
+}
