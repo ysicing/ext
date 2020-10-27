@@ -78,6 +78,12 @@ func GetMonth() string {
 	return time.Now().Format("200601")
 }
 
+// GetShortMonth 获取当前月份
+func GetShortMonth() string {
+	res := time.Now().Format("2006-01")
+	return strings.Split(res, "-")[1]
+}
+
 // GetYear 获取当前年份
 func GetYear() string {
 	return time.Now().Format("2006")
@@ -162,9 +168,9 @@ func NowAddUnix2Str(key string, value time.Duration) string {
 // GetMonthDayNum 获取任已一年月的天数
 func GetMonthDayNum(year, month string) int {
 	switch month {
-	case "1", "3", "5", "7", "8", "10", "12":
+	case "01", "03", "05", "07", "08", "10", "12":
 		return 31
-	case "4", "6", "9", "11":
+	case "04", "06", "09", "11":
 		return 30
 	default:
 		if IsLeapYear(convert.Str2Int(year)) {
@@ -198,4 +204,66 @@ func GetMonthStartEndUnix(year, month string) (int64, int64) {
 	st := fmt.Sprintf("%v-%v-01 00:00:00", year, month)
 	et := fmt.Sprintf("%v-%v-%v 23:59:59", year, month, GetMonthDayNum(year, month))
 	return TimeToUninx(st), TimeToUninx(et)
+}
+
+// GetMonthAddInt64 前几个月或者后几个月
+func GetMonthAddInt64(value int64) int64 {
+	year := time.Now().Year()
+	mon := convert.Str2Int64(GetShortMonth())
+	// value -1
+	if value >= 0 {
+		if value+mon > 12 {
+			year = year + 1
+			value = value + mon - 12
+			_, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return et
+		} else {
+			value = value + mon
+			_, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return et
+		}
+	} else {
+		// value -10 12月
+		if value+mon <= 0 {
+			year = year - 1
+			value = 12 + (value + mon)
+			st, _ := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return st
+		} else {
+			value = value + mon
+			st, _ := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return st
+		}
+	}
+}
+
+// // GetMonthAddStr 前几个月或者后几个月
+func GetMonthAddStr(value int64) string {
+	year := time.Now().Year()
+	mon := convert.Str2Int64(GetShortMonth())
+	// value -1
+	if value >= 0 {
+		if value+mon > 12 {
+			year = year + 1
+			value = value + mon - 12
+			_, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return UnixInt642String(et)
+		} else {
+			value = value + mon
+			_, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return UnixInt642String(et)
+		}
+	} else {
+		// value -10 12月
+		if value+mon <= 0 {
+			year = year - 1
+			value = 12 + (value + mon)
+			st, _ := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return UnixInt642String(st)
+		} else {
+			value = value + mon
+			st, _ := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return UnixInt642String(st)
+		}
+	}
 }

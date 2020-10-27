@@ -3,7 +3,9 @@
 
 package extime
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestIsLeapYear(t *testing.T) {
 	years := []int{
@@ -42,5 +44,12 @@ func TestGetMonthStartEndUnix(t *testing.T) {
 	for _, month := range months {
 		st, et := GetMonthStartEndUnix(month["year"], month["month"])
 		t.Logf("year: %v, month: %v, st: %v (%v) et: %v (%v)", month["year"], month["month"], st, UnixInt642String(st), et, UnixInt642String(et))
+	}
+}
+
+func TestGetMonthAdd(t *testing.T) {
+	tests := []int64{0, 1, -1, 10, -10, 12, -12}
+	for _, test := range tests {
+		t.Logf("value %v res: %v (%v)", test, GetMonthAddStr(test), GetMonthAddInt64(test))
 	}
 }
