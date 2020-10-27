@@ -53,3 +53,11 @@ func TestGetMonthAdd(t *testing.T) {
 		t.Logf("value %v res: %v (%v)", test, GetMonthAddStr(test), GetMonthAddInt64(test))
 	}
 }
+
+func TestNowMonthAddNum(t *testing.T) {
+	tests := []int64{0, 1, -1, 10, -10, 12, -12, 4, -8}
+	for _, test := range tests {
+		st, et := NowMonthAddNum(test)
+		t.Logf("value %v res: %v (%v)", test, UnixInt642String(st), UnixInt642String(et))
+	}
+}

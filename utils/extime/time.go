@@ -267,3 +267,34 @@ func GetMonthAddStr(value int64) string {
 		}
 	}
 }
+
+// NowMonthAddNum 某个月
+func NowMonthAddNum(value int64) (int64, int64) {
+	year := time.Now().Year()
+	mon := convert.Str2Int64(GetShortMonth())
+	// value -1
+	if value >= 0 {
+		if value+mon > 12 {
+			year = year + 1
+			value = value + mon - 12
+			st, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return st, et
+		} else {
+			value = value + mon
+			st, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return st, et
+		}
+	} else {
+		// value -10 12月
+		if value+mon <= 0 {
+			year = year - 1
+			value = 12 + (value + mon)
+			st, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return st, et
+		} else {
+			value = value + mon
+			st, et := GetMonthStartEndUnix(convert.Int642Str(int64(year)), convert.Int642Str(value))
+			return st, et
+		}
+	}
+}
