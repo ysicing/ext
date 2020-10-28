@@ -14,7 +14,7 @@ import (
 )
 
 func init() {
-	logcfg := &logger.LogConfig{Simple: true}
+	logcfg := &logger.Config{Simple: true, ConsoleOnly: true}
 	logger.InitLogger(logcfg)
 }
 
@@ -28,7 +28,7 @@ func main() {
 	}
 	respdata, err := etcdapi.Clientv3.Cluster.MemberList(context.Background())
 	if err != nil {
-		logger.Slog.Exit(-1, err)
+		logger.Slog.Fatal(err)
 	}
 	for _, mem := range respdata.Members {
 		logger.Slog.Debug(mem.Name, mem.ID, mem.PeerURLs)
@@ -48,7 +48,7 @@ func main() {
 	go svc.Register()
 	svcresp, err := svc.GetService("/macnode/node")
 	if err != nil {
-		logger.Slog.Exit(0, err)
+		logger.Slog.Exit0(err)
 	}
 	logger.Slog.Info(svcresp)
 }

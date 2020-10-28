@@ -30,7 +30,15 @@ func demohook() func(entry zapcore.Entry) error {
 }
 
 func init() {
-	cfg := logger.LogConfig{Simple: true, HookFunc: demohook()}
+	cfg := logger.Config{
+		Simple:      true,
+		HookFunc:    logger.Defaulthook(),
+		ConsoleOnly: false,
+		JsonFormat:  true,
+		LogConfig: logger.LogConfig{
+			LogPath: "/tmp/ginlogs",
+		},
+	}
 	logger.InitLogger(&cfg)
 }
 

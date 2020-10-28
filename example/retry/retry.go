@@ -11,7 +11,13 @@ import (
 )
 
 func init() {
-	cfg := logger.LogConfig{Simple: true}
+	cfg := logger.Config{
+		Simple:      true,
+		ConsoleOnly: true,
+		LogConfig: logger.LogConfig{
+			LogPath: "/tmp/retrylog",
+		},
+	}
 	logger.InitLogger(&cfg)
 }
 

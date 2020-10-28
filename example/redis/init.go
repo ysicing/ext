@@ -22,10 +22,11 @@ func init() {
 	cfg := redis.Config{RedisCfg: &rediscfg}
 	RCClient = redis.New(&cfg)
 
-	logcfg := logger.LogConfig{
-		Simple:     true,
-		HookFunc:   nil,
-		JsonFormat: false,
+	logcfg := logger.Config{
+		Simple:      true,
+		HookFunc:    nil,
+		JsonFormat:  false,
+		ConsoleOnly: true,
 	}
 	logger.InitLogger(&logcfg)
 }
