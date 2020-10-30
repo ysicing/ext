@@ -10,8 +10,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/ysicing/ext/e"
 	"github.com/ysicing/ext/ginmid"
+	"github.com/ysicing/ext/httputil"
 	"github.com/ysicing/ext/logger"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -34,7 +36,7 @@ func init() {
 		Simple:      true,
 		HookFunc:    logger.Defaulthook(),
 		ConsoleOnly: false,
-		JsonFormat:  true,
+		JsonFormat:  false,
 		LogConfig: logger.LogConfig{
 			LogPath: "/tmp/ginlogs",
 		},
@@ -74,5 +76,12 @@ func main() {
 
 	// Listen and Server in 0.0.0.0:8080
 	logger.Slog.Hook("startup")
-	r.Run(":8080")
+	//r.Run(":8080")
+	srv := http.Server{Addr: ":8080", Handler: r}
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			logger.Slog.Fatal(err)
+		}
+	}()
+	httputil.SetupGracefulStop(&srv)
 }

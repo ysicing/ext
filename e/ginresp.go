@@ -16,19 +16,18 @@ func Done(data interface{}) gin.H {
 	}
 }
 
-func Error(data interface{}) gin.H {
-	return gin.H{
-		"data":      data,
-		"timestamp": extime.NowUnix(),
-		"code":      "10400",
+func Error(code string, data interface{}, msg ...string) gin.H {
+	if len(msg) == 0 {
+		return gin.H{
+			"data":      data,
+			"timestamp": extime.NowUnix(),
+			"code":      code,
+		}
 	}
-}
-
-func Errorv2(code int, message string, data interface{}) gin.H {
 	return gin.H{
 		"data":      data,
 		"timestamp": extime.NowUnix(),
 		"code":      code,
-		"message":   message,
+		"message":   msg[0],
 	}
 }

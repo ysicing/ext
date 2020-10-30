@@ -8,3 +8,5 @@
 out
 gen
 db.sqlite
+example/dblog/dblog.log
+example/dblog/db.sqlite
