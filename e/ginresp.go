@@ -12,11 +12,11 @@ func Done(data interface{}) gin.H {
 	return gin.H{
 		"data":      data,
 		"timestamp": extime.NowUnix(),
-		"code":      "200",
+		"code":      200,
 	}
 }
 
-func Error(code string, data interface{}, msg ...string) gin.H {
+func Error(code int64, data interface{}, msg ...string) gin.H {
 	if len(msg) == 0 {
 		return gin.H{
 			"data":      data,
