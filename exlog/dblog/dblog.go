@@ -77,8 +77,8 @@ func (l Logger) Trace(ctx context.Context, begin time.Time, fc func() (string, i
 		switch {
 		case err != nil && l.Loglevel >= glog.Error:
 			sql, rows := fc()
-			if rows == -1 {
-				l.Zlog.Errorf(traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			if rows == -1 || rows == 0 {
+				l.Zlog.Warnf(traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
 			} else {
 				l.Zlog.Errorf(traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
 			}
