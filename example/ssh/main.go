@@ -25,10 +25,10 @@ func main() {
 		User:   "root",
 		PkFile: "/Users/ysicing/.ssh/id_rsa",
 	}
-	if err := ssh.CmdAsync("10.147.20.45:22", "w"); err != nil {
+	if err := ssh.CmdAsync("172.16.16.55:22", "w"); err != nil {
 		logger.Slog.Error(err.Error())
 	}
-	if err := ssh.CmdAsync("10.147.20.45:22", "w", true); err != nil {
+	if err := ssh.CmdAsync("172.16.16.55:22", "w", true); err != nil {
 		logger.Slog.Error(err.Error())
 	}
 	//ssh2 := sshutil.SSH{
@@ -38,4 +38,7 @@ func main() {
 	//if err := ssh2.CmdAsync("11.11.11.11:22", "w"); err != nil {
 	//	logger.Slog.Error(err.Error())
 	//}
+	if err := ssh.CmdAsync("172.16.16.55:22", "docker system prune", false); err != nil {
+		logger.Slog.Error(err.Error())
+	}
 }

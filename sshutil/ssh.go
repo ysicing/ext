@@ -9,6 +9,7 @@ import (
 	"github.com/ysicing/ext/logger"
 	"github.com/ysicing/ext/utils/exmisc"
 	"io"
+	"os"
 	"strings"
 )
 
@@ -84,6 +85,11 @@ func (ss *SSH) CmdAsync(host string, cmd string, debugmsg ...bool) error {
 		logger.Slog.Errorf("[ssh][%s]Unable to request StderrPipe(): %s", host, err)
 		return err
 	}
+	stdin, err := session.StdinPipe()
+	if err != nil {
+		logger.Slog.Errorf("[ssh][%s]Unable to request StdinPipe(): %s", host, err)
+		return err
+	}
 	if err := session.Start(cmd); err != nil {
 		logger.Slog.Errorf("[ssh][%s]Unable to execute command: %s", host, err)
 		return err
@@ -97,6 +103,23 @@ func (ss *SSH) CmdAsync(host string, cmd string, debugmsg ...bool) error {
 	go func() {
 		readPipe(host, stdout, false, debugmsg...)
 		doneout <- true
+	}()
+	go func() {
+		buf := make([]byte, 128)
+		for {
+			n, err := os.Stdin.Read(buf)
+			if err != nil {
+				logger.Slog.Errorf("[ssh][%s]Unable to read stdin: %s", host, err)
+				return
+			}
+			if n > 0 {
+				_, err := stdin.Write(buf[:n])
+				if err != nil {
+					logger.Slog.Errorf("[ssh][%s]Unable to write stdin: %s", host, err)
+					return
+				}
+			}
+		}
 	}()
 	<-doneerr
 	<-doneout
