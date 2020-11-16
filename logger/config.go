@@ -15,12 +15,13 @@ import (
 )
 
 type Config struct {
-	Simple      bool //
-	HookFunc    func(zapcore.Entry) error
-	JsonFormat  bool
-	CallerSkip  bool
-	ConsoleOnly bool // 不写日志文件
-	LogConfig   LogConfig
+	Simple        bool //
+	HookFunc      func(zapcore.Entry) error
+	JsonFormat    bool
+	CallerSkip    bool
+	ConsoleOnly   bool // 不写日志文件
+	HookSimpleLog bool
+	LogConfig     LogConfig
 }
 
 type LogConfig struct {
@@ -129,13 +130,26 @@ func (cfg *Config) getCores() zapcore.Core {
 		debugPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
 			return level < zap.InfoLevel
 		})
-		customPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
-			return level >= zap.InfoLevel && level < zap.ErrorLevel
-		})
+		if cfg.HookSimpleLog {
+			hookPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+				return level == zap.HookLevel
+			})
+			customPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+				return level >= zap.InfoLevel && level < zap.ErrorLevel && level != zap.HookLevel
+			})
+			customCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(cfg.logsyncer("custom")), customPriority)
+			hookCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(cfg.logsyncer("hook")), hookPriority)
+			cors = append(cors, customCore, hookCore)
+		} else {
+			customPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+				return level >= zap.InfoLevel && level < zap.ErrorLevel
+			})
+			customCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(cfg.logsyncer("custom")), customPriority)
+			cors = append(cors, customCore)
+		}
 		errCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(cfg.logsyncer("err")), errPriority)
 		debugCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(cfg.logsyncer("debug")), debugPriority)
-		infoCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(cfg.logsyncer("info")), customPriority)
-		cors = append(cors, errCore, debugCore, infoCore)
+		cors = append(cors, errCore, debugCore)
 	}
 	return zapcore.NewTee(cors...)
 }
