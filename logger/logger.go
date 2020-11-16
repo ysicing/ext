@@ -9,8 +9,8 @@ import (
 
 const (
 	DefaultMaxSize  = 10 // MB
-	DefaultBackups  = 3
-	DefaultMaxAge   = 7 // days
+	DefaultBackups  = 3  // 备份
+	DefaultMaxAge   = 7  // days
 	DefaultCompress = true
 )
 

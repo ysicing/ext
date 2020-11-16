@@ -12,12 +12,12 @@ import (
 type BotConfig struct {
 	ApiProxy string
 	BotToken string
-	Debug bool
+	Debug    bool
 }
 
 type BotClinet struct {
-	Client *tgbotapi.BotAPI
-	UserID int64
+	Client   *tgbotapi.BotAPI
+	UserID   int64
 	ChanName string
 }
 
@@ -28,7 +28,7 @@ func NewBot(cfg *BotConfig) *tgbotapi.BotAPI {
 	}
 	bot, err := tgbotapi.NewBotAPIWithAPIEndpoint(cfg.BotToken, endpoint)
 	if err != nil {
-		logger.Slog.Fatalf("create bot conn: ",err)
+		logger.Slog.Fatalf("create bot conn: ", err)
 		return nil
 	}
 	bot.Debug = cfg.Debug

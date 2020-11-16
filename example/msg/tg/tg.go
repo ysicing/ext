@@ -8,7 +8,7 @@ import (
 	"github.com/ysicing/ext/utils/extime"
 )
 
-func main()  {
+func main() {
 	tgcfg := tg.BotConfig{
 		ApiProxy: "https://botapi.hk2.godu.dev/bot%s/%s",
 		BotToken: "botxxx",
