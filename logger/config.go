@@ -125,7 +125,10 @@ func (cfg *Config) getCores() zapcore.Core {
 		return level < zap.InfoLevel
 	})
 	customPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
-		return level >= zap.InfoLevel && level < zap.ErrorLevel
+		return level >= zap.InfoLevel && level < zap.HookLevel
+	})
+	hookPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+		return level == zap.HookLevel
 	})
 	errPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
 		return level >= zap.ErrorLevel
@@ -139,16 +142,16 @@ func (cfg *Config) getCores() zapcore.Core {
 	cors = append(cors, consoleCore)
 	if !cfg.ConsoleOnly {
 		// 输出文件
+		filecoder := cfg.getEncoder(cfg.JsonFormat)
+		hookCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("hook")), hookPriority)
 		if cfg.Simple {
-			filecoder := cfg.getEncoder(cfg.JsonFormat)
 			simpleCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("custom")), defaultPriority)
-			cors = append(cors, simpleCore)
+			cors = append(cors, hookCore, simpleCore)
 		} else {
-			filecoder := cfg.getEncoder(cfg.JsonFormat)
 			debugCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("debug")), debugPriority)
 			customCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("custom")), customPriority)
 			errCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("err")), errPriority)
-			cors = append(cors, debugCore, customCore, errCore)
+			cors = append(cors, hookCore, debugCore, customCore, errCore)
 		}
 	}
 	return zapcore.NewTee(cors...)
