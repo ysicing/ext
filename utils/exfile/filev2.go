@@ -4,6 +4,7 @@
 package exfile
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -54,4 +55,32 @@ func Rmdir(path string, notIncludeSelf ...bool) (ok bool) {
 		_ = os.Mkdir(path, os.ModePerm)
 	}
 	return
+}
+
+func FileSize(path string) float64 {
+	fi, err := os.Stat(path)
+	if err == nil {
+		bs := float64(fi.Size())
+		return bs
+	}
+	return 0
+}
+
+func FileSize2Str(path string) string {
+	fi, err := os.Stat(path)
+	if err == nil {
+		bs := float64(fi.Size())
+		kbs := bs / 1024.0
+		mbs := kbs / 1024.0
+		if mbs < 1024.0 {
+			return fmt.Sprintf("%v M", mbs)
+		}
+		gbs := mbs / 1024.0
+		if gbs < 1024.0 {
+			return fmt.Sprintf("%v G", gbs)
+		}
+		tbs := gbs / 1024.0
+		return fmt.Sprintf("%v T", tbs)
+	}
+	return ""
 }

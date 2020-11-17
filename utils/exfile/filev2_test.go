@@ -91,3 +91,21 @@ func Test_pathAddSlash(t *testing.T) {
 		})
 	}
 }
+
+func TestFileSize2Str(t *testing.T) {
+	type args struct {
+		path string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FileSize2Str(tt.args.path); got != tt.want {
+				t.Errorf("FileSize2Str() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
