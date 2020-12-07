@@ -7,7 +7,7 @@ require (
 	github.com/coreos/etcd v3.3.12+incompatible
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.0.0-rc1.0.20201106042948-366879b11047
-	github.com/gomodule/redigo v1.8.2
+	github.com/gomodule/redigo v1.8.3
 	github.com/google/uuid v1.1.2
 	github.com/kunnos/zap v0.0.0-20201004105532-2bb6b0fc10a0
 	github.com/mitchellh/go-homedir v1.1.0
@@ -18,5 +18,5 @@ require (
 	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/sqlite v1.1.3
-	gorm.io/gorm v1.20.6
+	gorm.io/gorm v1.20.8
 )

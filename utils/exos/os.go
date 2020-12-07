@@ -5,6 +5,7 @@ package exos
 
 import (
 	"github.com/ysicing/ext/utils/exfile"
+	"net"
 	"os"
 	ou "os/user"
 	"runtime"
@@ -63,4 +64,20 @@ func GetHostname() []string {
 		return nil
 	}
 	return []string{host}
+}
+
+// GetFreePort 获取空闲端口
+func GetFreePort() int {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		return 0
+	}
+
+	port := listener.Addr().(*net.TCPAddr).Port
+	err = listener.Close()
+	if err != nil {
+		return 0
+	}
+
+	return port
 }

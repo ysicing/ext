@@ -13,4 +13,5 @@ func TestOS(t *testing.T) {
 	t.Logf("user %v", GetUser())
 	t.Logf("username %v", GetUserName())
 	t.Logf("hostname %v", GetHostname()[0])
+	t.Logf("freeport %v", GetFreePort())
 }
