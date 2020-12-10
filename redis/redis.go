@@ -155,8 +155,42 @@ func (c *Client) RCGet(key string) ([]byte, error) {
 func (c *Client) RCLPUSH(queue, payload string) error {
 	client := c.RClient.Get()
 	defer client.Close()
-	_, err := client.Do("LPUSH", queue, payload)
+	_, err := client.Do("LPUSH", queue, payload) // 头部
 	return err
+}
+
+// RCRPUSH 列表
+func (c *Client) RCRPUSH(queue, payload string) error {
+	client := c.RClient.Get()
+	defer client.Close()
+	_, err := client.Do("RPUSH", queue, payload) // 尾部
+	return err
+}
+
+// RCLPOP 列表
+func (c *Client) RCLPOP(queue string) string {
+	client := c.RClient.Get()
+	defer client.Close()
+	reply, err := redis.String(client.Do("LPOP", queue)) // 头部
+	if err != nil {
+		if err != redis.ErrNil {
+			return ""
+		}
+	}
+	return reply
+}
+
+// RCRPOP 列表
+func (c *Client) RCRPOP(queue string) string {
+	client := c.RClient.Get()
+	defer client.Close()
+	reply, err := redis.String(client.Do("RPOP", queue)) // 尾部
+	if err != nil {
+		if err != redis.ErrNil {
+			return ""
+		}
+	}
+	return reply
 }
 
 func (c *Client) Close() {
