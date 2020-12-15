@@ -6,7 +6,7 @@ package dblog
 import (
 	"context"
 	"fmt"
-	"github.com/kunnos/zap"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	glog "gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"

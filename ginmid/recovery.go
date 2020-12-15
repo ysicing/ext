@@ -5,7 +5,6 @@ package ginmid
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/kunnos/zap"
 	"github.com/ysicing/ext/logger"
 	"net"
 	"net/http"
@@ -28,24 +27,15 @@ func Recovery() gin.HandlerFunc {
 						}
 					}
 				}
-
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					logger.Slog.Error(c.Request.URL.Path,
-						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
-					)
+					logger.Slog.Errorf("Recovery from brokenPipe ---> path: %v, err: %v, request: %v", c.Request.URL.Path, err, string(httpRequest))
 					c.Error(err.(error))
 					c.Abort()
-					return
+				} else {
+					logger.Slog.Errorf("Recovery from panic ---> err: %v, request: %v, stack: %v", err, string(httpRequest), string(debug.Stack()))
+					c.AbortWithStatus(http.StatusInternalServerError)
 				}
-
-				logger.Slog.Error("[Recovery from panic]",
-					zap.Any("error", err),
-					zap.String("request", string(httpRequest)),
-					zap.String("stack", string(debug.Stack())),
-				)
-				c.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()
 		c.Next()

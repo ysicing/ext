@@ -4,7 +4,7 @@
 package main
 
 import (
-	"github.com/kunnos/zap"
+	"go.uber.org/zap"
 	"github.com/ysicing/ext/deprecated/gormv2"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

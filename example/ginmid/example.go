@@ -6,7 +6,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/kunnos/zap/zapcore"
+	"go.uber.org/zap/zapcore"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/ysicing/ext/e"
 	"github.com/ysicing/ext/ginmid"
@@ -23,8 +23,8 @@ func demohook() func(entry zapcore.Entry) error {
 			log.Println("err hook")
 			return nil
 		}
-		if entry.Level == zapcore.HookLevel {
-			log.Println("hook hook")
+		if entry.Level == zapcore.WarnLevel {
+			log.Println("warn log")
 			return nil
 		}
 		return nil
@@ -49,7 +49,7 @@ func main() {
 	// gin.DisableConsoleColor()
 	r := gin.New()
 
-	r.Use(ginmid.RequestID(), ginmid.PromMiddleware(nil), ginmid.Log(), ginmid.Recovery())
+	r.Use(ginmid.RequestID(), ginmid.Log(), ginmid.Recovery(), ginmid.Ginprom())
 
 	// Example ping request.
 	r.GET("/ping", func(c *gin.Context) {
@@ -62,7 +62,7 @@ func main() {
 	})
 
 	// Example /metrics
-	r.GET("/metrics", ginmid.PromHandler(promhttp.Handler()))
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	// Example status 500
 	r.GET("/err500", func(c *gin.Context) {
@@ -75,7 +75,7 @@ func main() {
 	})
 
 	// Listen and Server in 0.0.0.0:8080
-	logger.Slog.Hook("startup")
+	logger.Slog.Warn("startup")
 	//r.Run(":8080")
 	srv := http.Server{Addr: ":8080", Handler: r}
 	go func() {

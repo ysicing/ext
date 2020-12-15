@@ -5,7 +5,7 @@ package gormv2
 
 import (
 	"context"
-	"github.com/kunnos/zap"
+	"go.uber.org/zap"
 	"gorm.io/gorm/logger"
 	"path/filepath"
 	"runtime"

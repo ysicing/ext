@@ -5,8 +5,8 @@ package logger
 
 import (
 	"fmt"
-	"github.com/kunnos/zap"
-	"github.com/kunnos/zap/zapcore"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"github.com/ysicing/ext/utils/exos"
 	"github.com/ysicing/ext/utils/extime"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -125,10 +125,10 @@ func (cfg *Config) getCores() zapcore.Core {
 		return level < zap.InfoLevel
 	})
 	customPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
-		return level >= zap.InfoLevel && level < zap.HookLevel
+		return level >= zap.InfoLevel && level < zap.WarnLevel
 	})
-	hookPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
-		return level == zap.HookLevel
+	warnPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+		return level == zap.WarnLevel
 	})
 	errPriority := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
 		return level >= zap.ErrorLevel
@@ -143,7 +143,7 @@ func (cfg *Config) getCores() zapcore.Core {
 	if !cfg.ConsoleOnly {
 		// 输出文件
 		filecoder := cfg.getEncoder(cfg.JsonFormat)
-		hookCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("hook")), hookPriority)
+		hookCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("hook")), warnPriority)
 		if cfg.Simple {
 			simpleCore := zapcore.NewCore(filecoder, zapcore.NewMultiWriteSyncer(cfg.logfilesyncer("custom")), defaultPriority)
 			cors = append(cors, hookCore, simpleCore)
@@ -167,8 +167,8 @@ func Defaulthook() func(entry zapcore.Entry) error {
 			fmt.Println("err hook")
 			return nil
 		}
-		if entry.Level == zapcore.HookLevel {
-			fmt.Println("hook hook")
+		if entry.Level == zapcore.WarnLevel {
+			fmt.Println("Warn log")
 			return nil
 		}
 		return nil

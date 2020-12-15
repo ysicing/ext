@@ -4,7 +4,7 @@
 package logger
 
 import (
-	"github.com/kunnos/zap"
+	"go.uber.org/zap"
 )
 
 const (

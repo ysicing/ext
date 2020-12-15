@@ -4,7 +4,7 @@
 package gormv1
 
 import (
-	"github.com/kunnos/zap"
+	"go.uber.org/zap"
 	"time"
 )
 
