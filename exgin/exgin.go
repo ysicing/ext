@@ -135,3 +135,21 @@ func ExRid() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// ReadCookie 读cookie
+func ReadCookie(c *gin.Context, key string) (string, error) {
+	ck, err := c.Cookie(key)
+	if err != nil {
+		return "", err
+	}
+	return ck, nil
+}
+
+func WriteDefaultCookie(c *gin.Context, key, value string, args ...string)  {
+	if len(args) > 0 {
+		c.SetCookie(key, value, 3600*24, "/", args[0], false, true)
+
+	} else {
+		c.SetCookie(key, value, 3600*24, "/", "localhost", false, true)
+	}
+}
