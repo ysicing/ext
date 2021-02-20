@@ -44,3 +44,10 @@ func Dangerous(v interface{}) {
 		panic(GinsError{Message: t.Error()})
 	}
 }
+
+// CheckAndExit check & exit
+func CheckAndExit(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
