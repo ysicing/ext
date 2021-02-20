@@ -150,6 +150,24 @@ func WriteDefaultCookie(c *gin.Context, key, value string, args ...string)  {
 		c.SetCookie(key, value, 3600*24, "/", args[0], false, true)
 
 	} else {
-		c.SetCookie(key, value, 3600*24, "/", "localhost", false, true)
+		c.SetCookie(key, value, 3600*24, "/", "", false, true)
 	}
+}
+
+// FoundRedirect redirect with the StatusFound
+func FoundRedirect(c *gin.Context, location string) {
+	c.Redirect(http.StatusFound, location)
+	c.Abort()
+}
+
+// MovedRedirect redirect with the StatusMovedPermanently
+func MovedRedirect(c *gin.Context, location string) {
+	c.Redirect(http.StatusMovedPermanently, location)
+	c.Abort()
+}
+
+// TemporaryRedirect redirect with the StatusTemporaryRedirect
+func TemporaryRedirect(c *gin.Context, location string) {
+	c.Redirect(http.StatusTemporaryRedirect, location)
+	c.Abort()
 }

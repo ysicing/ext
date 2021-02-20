@@ -4,6 +4,7 @@
 package exgin
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/ysicing/ext/gerr"
 	"strconv"
@@ -132,4 +133,19 @@ func GinsOffset(c *gin.Context, limit int) int {
 // GinsHeader header key
 func GinsHeader(c *gin.Context, headerkey string) string {
 	return c.GetHeader(headerkey)
+}
+
+func GetOrigin(c *gin.Context) string {
+	scheme := "http"
+	host := c.Request.Host
+	forwardedHost := c.GetHeader("X-Forwarded-Host")
+	if forwardedHost != "" {
+		host = forwardedHost
+	}
+	forwardedProto := c.GetHeader("X-Forwarded-Proto")
+	if forwardedProto == "https" {
+		scheme = forwardedProto
+	}
+
+	return fmt.Sprintf("%s://%s", scheme, host)
 }
