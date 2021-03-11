@@ -9,5 +9,5 @@ require (
 	github.com/google/uuid v1.2.0
 	go.uber.org/zap v1.16.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
-	gorm.io/gorm v1.20.12
+	gorm.io/gorm v1.21.3
 )

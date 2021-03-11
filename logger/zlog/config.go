@@ -24,7 +24,7 @@ const (
 // Config 配置
 type Config struct {
 	Simple      bool                            // 简易模式
-	HookFunc    func(entry zapcore.Entry) error // hook
+	HookFunc    []func(entry zapcore.Entry) error // hook
 	WriteLog    bool                            // 写日志
 	WriteJSON   bool                            // json
 	WriteConfig WriteConfig
@@ -44,7 +44,9 @@ func (c *Config) debugMode() []zap.Option {
 	if !c.Simple {
 		cfgopts = append(cfgopts, zap.AddCaller(), zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
 	}
-	cfgopts = append(cfgopts, zap.Hooks(warnHook()))
+	if len(c.HookFunc) != 0 {
+		cfgopts = append(cfgopts, zap.Hooks(c.HookFunc...))
+	}
 	return cfgopts
 }
 
