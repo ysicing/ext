@@ -23,10 +23,10 @@ const (
 
 // Config 配置
 type Config struct {
-	Simple      bool                            // 简易模式
+	Simple      bool                              // 简易模式
 	HookFunc    []func(entry zapcore.Entry) error // hook
-	WriteLog    bool                            // 写日志
-	WriteJSON   bool                            // json
+	WriteLog    bool                              // 写日志
+	WriteJSON   bool                              // json
 	WriteConfig WriteConfig
 	ServiceName string
 }
@@ -98,9 +98,9 @@ func (c *Config) getLogConfig() *WriteConfig {
 	logcfg = c.WriteConfig
 	if logcfg.LogPath == "" {
 		if zos.IsMacOS() {
-			logcfg.LogPath = fmt.Sprintf("/tmp/%v/%v", c.svcname(), ztime.GetToday())
+			logcfg.LogPath = fmt.Sprintf("/tmp/%v/%v", c.svcname(), ztime.NowDay())
 		} else {
-			logcfg.LogPath = fmt.Sprintf("/var/log/%v/%v", c.svcname(), ztime.GetToday())
+			logcfg.LogPath = fmt.Sprintf("/var/log/%v/%v", c.svcname(), ztime.NowDay())
 		}
 	}
 	if logcfg.MaxAge <= defaultMaxAge {

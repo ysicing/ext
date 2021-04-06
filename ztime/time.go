@@ -20,9 +20,54 @@ func NowUnix() int64 {
 	return time.Now().Unix()
 }
 
-// NowFormat 当前时间format
-func NowFormat() string {
-	return time.Now().Format("2006-01-02 15:04:05")
+// TimeParse time parse
+func TimeParse(layout, t string) (time.Time, error) {
+	return time.Parse(layout, t)
+}
+
+// TimeLayoutStr time layout to str
+func TimeLayoutStr(layout string) string {
+	return time.Now().Format(layout)
+}
+
+// NowStr 当前时间
+func NowStr() string {
+	return TimeLayoutStr("2006-01-02 15:04:05")
+}
+
+// NowMin 获取当前分钟
+func NowMin() string {
+	return TimeLayoutStr("200601021504")
+}
+
+// NowHour 获取当前小时
+func NowHour() string {
+	return TimeLayoutStr("2006010215")
+}
+
+// NowDay 获取当前日期
+func NowDay() string {
+	return TimeLayoutStr("20060102")
+}
+
+// NowMonth 获取当前月份
+func NowMonth() string {
+	return TimeLayoutStr("200601")
+}
+
+// NowYear 获取当前年份
+func NowYear() string {
+	return TimeLayoutStr("2006")
+}
+
+// NowShortHour 获取今天具体小时
+func NowShortHour() string {
+	return strings.ReplaceAll(NowHour(), NowDay(), "")
+}
+
+// NowShortMonth 获取当前月份
+func NowShortMonth() string {
+	return strings.ReplaceAll(NowMonth(), NowYear(), "")
 }
 
 // Today0hourUnix 今天0时时间戳
@@ -55,44 +100,6 @@ func UnixNanoInt642String(t int64) string {
 // UnixNanoString2String unix转化为字符串
 func UnixNanoString2String(t string) string {
 	return time.Unix(0, exstr.Str2Int64(t)).Format("2006-01-02 15:04:05")
-}
-
-// GetTodayMin 获取今天时间分钟
-func GetTodayMin() string {
-	return time.Now().Format("200601021504")
-}
-
-// GetTodayHour 获取今天时间小时
-func GetTodayHour() string {
-	return time.Now().Format("2006010215")
-}
-
-// GetToday 获取今天时间
-func GetToday() string {
-	return time.Now().Format("20060102")
-}
-
-// GetTodaySingleHour 获取今天具体小时
-func GetTodaySingleHour() string {
-	today := GetToday()
-	todayhour := GetTodayHour()
-	return strings.ReplaceAll(todayhour, today, "")
-}
-
-// GetMonth 获取当前月份
-func GetMonth() string {
-	return time.Now().Format("200601")
-}
-
-// GetShortMonth 获取当前月份
-func GetShortMonth() string {
-	res := time.Now().Format("2006-01")
-	return strings.Split(res, "-")[1]
-}
-
-// GetYear 获取当前年份
-func GetYear() string {
-	return time.Now().Format("2006")
 }
 
 // GetWeekFristDayUnix 时间
@@ -186,7 +193,7 @@ func GetMonthDayNum(year, month string) int {
 	}
 }
 
-//判断是否为闰年
+// IsLeapYear 判断是否为闰年
 func IsLeapYear(year int) bool { //y == 2000, 2004
 	//判断是否为闰年
 	if year%4 == 0 && year%100 != 0 || year%400 == 0 {
@@ -195,27 +202,27 @@ func IsLeapYear(year int) bool { //y == 2000, 2004
 	return false
 }
 
-// 时间转时间戳
-func TimeToUninx(t string) int64 {
+// TimeToUninx 时间转时间戳
+func TimeToUninx(layout, t string) int64 {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
-	tt, _ := time.ParseInLocation("2006-01-02 15:04:05", t, loc) //2006-01-02 15:04:05是转换的格式如php的"Y-m-d H:i:s"
+	tt, _ := time.ParseInLocation(layout, t, loc) //2006-01-02 15:04:05是转换的格式如php的"Y-m-d H:i:s"
 	return tt.Unix()
 }
 
-// 某月开始和结束时间戳
+// GetMonthStartEndUnix 某月开始和结束时间戳
 func GetMonthStartEndUnix(year, month string) (int64, int64) {
 	if exstr.Str2Int(month) < 10 {
 		month = fmt.Sprintf("0%v", month)
 	}
 	st := fmt.Sprintf("%v-%v-01 00:00:00", year, month)
 	et := fmt.Sprintf("%v-%v-%v 23:59:59", year, month, GetMonthDayNum(year, month))
-	return TimeToUninx(st), TimeToUninx(et)
+	return TimeToUninx("2006-01-02 15:04:05", st), TimeToUninx("2006-01-02 15:04:05", et)
 }
 
 // GetMonthAddInt64 前几个月或者后几个月
 func GetMonthAddInt64(value int64) int64 {
 	year := time.Now().Year()
-	mon := exstr.Str2Int64(GetShortMonth())
+	mon := exstr.Str2Int64(NowShortMonth())
 	// value -1
 	if value >= 0 {
 		if value+mon > 12 {
@@ -223,30 +230,27 @@ func GetMonthAddInt64(value int64) int64 {
 			value = value + mon - 12
 			_, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
 			return et
-		} else {
-			value = value + mon
-			_, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return et
 		}
-	} else {
-		// value -10 12月
-		if value+mon <= 0 {
-			year = year - 1
-			value = 12 + (value + mon)
-			st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return st
-		} else {
-			value = value + mon
-			st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return st
-		}
+		value = value + mon
+		_, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+		return et
 	}
+	// value -10 12月
+	if value+mon <= 0 {
+		year = year - 1
+		value = 12 + (value + mon)
+		st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+		return st
+	}
+	value = value + mon
+	st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+	return st
 }
 
-// // GetMonthAddStr 前几个月或者后几个月
+// GetMonthAddStr 前几个月或者后几个月
 func GetMonthAddStr(value int64) string {
 	year := time.Now().Year()
-	mon := exstr.Str2Int64(GetShortMonth())
+	mon := exstr.Str2Int64(NowShortMonth())
 	// value -1
 	if value >= 0 {
 		if value+mon > 12 {
@@ -254,30 +258,28 @@ func GetMonthAddStr(value int64) string {
 			value = value + mon - 12
 			_, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
 			return UnixInt642String(et)
-		} else {
-			value = value + mon
-			_, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return UnixInt642String(et)
 		}
-	} else {
-		// value -10 12月
-		if value+mon <= 0 {
-			year = year - 1
-			value = 12 + (value + mon)
-			st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return UnixInt642String(st)
-		} else {
-			value = value + mon
-			st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return UnixInt642String(st)
-		}
+		value = value + mon
+		_, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+		return UnixInt642String(et)
+
 	}
+	// value -10 12月
+	if value+mon <= 0 {
+		year = year - 1
+		value = 12 + (value + mon)
+		st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+		return UnixInt642String(st)
+	}
+	value = value + mon
+	st, _ := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+	return UnixInt642String(st)
 }
 
 // NowMonthAddNum 某个月
 func NowMonthAddNum(value int64) (int64, int64) {
 	year := time.Now().Year()
-	mon := exstr.Str2Int64(GetShortMonth())
+	mon := exstr.Str2Int64(NowShortMonth())
 	// value -1
 	if value >= 0 {
 		if value+mon > 12 {
@@ -285,22 +287,19 @@ func NowMonthAddNum(value int64) (int64, int64) {
 			value = value + mon - 12
 			st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
 			return st, et
-		} else {
-			value = value + mon
-			st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return st, et
 		}
-	} else {
-		// value -10 12月
-		if value+mon <= 0 {
-			year = year - 1
-			value = 12 + (value + mon)
-			st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return st, et
-		} else {
-			value = value + mon
-			st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
-			return st, et
-		}
+		value = value + mon
+		st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+		return st, et
 	}
+	// value -10 12月
+	if value+mon <= 0 {
+		year = year - 1
+		value = 12 + (value + mon)
+		st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+		return st, et
+	}
+	value = value + mon
+	st, et := GetMonthStartEndUnix(exstr.Int642Str(int64(year)), exstr.Int642Str(value))
+	return st, et
 }

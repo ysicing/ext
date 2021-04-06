@@ -7,6 +7,7 @@ import (
 	"fmt"
 )
 
+// GinsError gin error
 type GinsError struct {
 	Message string
 }
@@ -19,10 +20,12 @@ func (ge *GinsError) String() string {
 	return ge.Message
 }
 
+// Bomb bomn
 func Bomb(format string, args ...interface{}) {
 	panic(GinsError{Message: fmt.Sprintf(format, args...)})
 }
 
+// Boka return bomb
 func Boka(value string, v interface{}) {
 	if v == nil {
 		return
@@ -30,6 +33,7 @@ func Boka(value string, v interface{}) {
 	Bomb(value)
 }
 
+// Dangerous dangerous
 func Dangerous(v interface{}) {
 	if v == nil {
 		return

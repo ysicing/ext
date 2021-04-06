@@ -135,6 +135,7 @@ func GinsHeader(c *gin.Context, headerkey string) string {
 	return c.GetHeader(headerkey)
 }
 
+// GetOrigin get origin
 func GetOrigin(c *gin.Context) string {
 	scheme := "http"
 	host := c.Request.Host
@@ -146,6 +147,5 @@ func GetOrigin(c *gin.Context) string {
 	if forwardedProto == "https" {
 		scheme = forwardedProto
 	}
-
 	return fmt.Sprintf("%s://%s", scheme, host)
 }

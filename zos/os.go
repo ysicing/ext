@@ -57,6 +57,7 @@ func GetUser() *user.User {
 	return user
 }
 
+// GetHostnames hostnames
 func GetHostnames() []string {
 	host, err := os.Hostname()
 	if err != nil {
@@ -65,6 +66,7 @@ func GetHostnames() []string {
 	return []string{host}
 }
 
+// GetHostname hostname
 func GetHostname() string {
 	hosts := GetHostnames()
 	if len(hosts) == 0 {
@@ -73,6 +75,7 @@ func GetHostname() string {
 	return hosts[0]
 }
 
+// GetOS get os
 func GetOS() string {
 	return runtime.GOOS
 }

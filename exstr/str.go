@@ -5,7 +5,7 @@ package exstr
 
 import "strings"
 
-// Blacklist
+// Blacklist 黑名单
 func Blacklist(s string) bool {
 	if strings.Contains(s, "<") {
 		return true

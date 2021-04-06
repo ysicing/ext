@@ -11,7 +11,7 @@ import (
 )
 
 // ReadHeader read list header
-func ReadHeader(queue string) (string) {
+func ReadHeader(queue string) string {
 	rc := RedisConn.Get()
 	defer rc.Close()
 	reply, err := redis.String(rc.Do("LPOP", queue)) // 头部
@@ -60,7 +60,8 @@ func WriteEnd(queue, message string) error {
 	return err
 }
 
-func WriteData(queue string,data interface{}) error {
+// WriteData write data to queue
+func WriteData(queue string, data interface{}) error {
 	if data == nil {
 		return fmt.Errorf("message is nil")
 	}

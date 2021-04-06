@@ -19,6 +19,7 @@ import (
 )
 
 var (
+	// FilePath filepath
 	FilePath = "."
 )
 
@@ -65,7 +66,8 @@ func Rmdir(path string, notIncludeSelf ...bool) (ok bool) {
 	return
 }
 
-func FileSize(path string) float64 {
+// Size file size
+func Size(path string) float64 {
 	fi, err := os.Stat(path)
 	if err == nil {
 		bs := float64(fi.Size())
@@ -74,7 +76,8 @@ func FileSize(path string) float64 {
 	return 0
 }
 
-func FileSize2Str(path string) string {
+// Size2Str file size
+func Size2Str(path string) string {
 	fi, err := os.Stat(path)
 	if err == nil {
 		bs := float64(fi.Size())
@@ -93,7 +96,7 @@ func FileSize2Str(path string) string {
 	return ""
 }
 
-//CheckFileExists check file exist
+// CheckFileExists check file exist
 func CheckFileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil || os.IsExist(err)
@@ -107,7 +110,7 @@ func Writefile(logpath, msg string) (err error) {
 	}
 	defer file.Close()
 	write := bufio.NewWriter(file)
-	write.WriteString(fmt.Sprintf("%v - %v\n", ztime.NowFormat(), msg))
+	write.WriteString(fmt.Sprintf("%v - %v\n", ztime.NowStr(), msg))
 	write.Flush()
 	return nil
 }
@@ -221,6 +224,7 @@ func Md5file(filename string) (string, error) {
 	return out, nil
 }
 
+// Md5FromLocal local md5
 func Md5FromLocal(localPath string) (string, error) {
 	cmd := fmt.Sprintf("md5sum %s | cut -d\" \" -f1", localPath)
 	c := exec.Command("sh", "-c", cmd)

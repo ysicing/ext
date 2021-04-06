@@ -21,6 +21,7 @@ import (
 	"time"
 )
 
+// ExGin gin engine
 func ExGin(debug bool) *gin.Engine {
 	if debug || zos.IsMacOS() {
 		gin.SetMode(gin.DebugMode)
@@ -71,7 +72,7 @@ func ExLog() gin.HandlerFunc {
 		if len(c.Errors) > 0 || c.Writer.Status() >= 500 {
 			msg := fmt.Sprintf("requestid %v => %v | %v | %v | %v | %v | %v <= err: %v", GetRID(c), misc.SRed("%v", c.Writer.Status()), c.ClientIP(), c.Request.Method, path, query, latency, c.Errors.String())
 			zlog.Warn(msg)
-			go file.Writefile(fmt.Sprintf("/tmp/%v.errreq.txt", ztime.GetToday()), msg)
+			go file.Writefile(fmt.Sprintf("/tmp/%v.errreq.txt", ztime.NowDay()), msg)
 		} else {
 			zlog.Info("requestid %v => %v | %v | %v | %v | %v | %v ", GetRID(c), misc.SGreen("%v", c.Writer.Status()), c.ClientIP(), c.Request.Method, path, query, latency)
 		}
@@ -106,7 +107,6 @@ func Exrecovery() gin.HandlerFunc {
 						"timestamp": ztime.NowUnix(),
 						"code":      10500,
 					})
-					return
 				} else {
 					zlog.Error("Recovery from panic ---> err: %v, request: %v, stack: %v", err, string(httpRequest), string(debug.Stack()))
 					c.AbortWithStatusJSON(200, gin.H{
@@ -115,8 +115,8 @@ func Exrecovery() gin.HandlerFunc {
 						"timestamp": ztime.NowUnix(),
 						"code":      10500,
 					})
-					return
 				}
+				return
 			}
 		}()
 		c.Next()
@@ -145,7 +145,8 @@ func ReadCookie(c *gin.Context, key string) (string, error) {
 	return ck, nil
 }
 
-func WriteDefaultCookie(c *gin.Context, key, value string, args ...string)  {
+// WriteDefaultCookie write default cookie
+func WriteDefaultCookie(c *gin.Context, key, value string, args ...string) {
 	if len(args) > 0 {
 		c.SetCookie(key, value, 3600*24, "/", args[0], false, true)
 

@@ -9,20 +9,22 @@ import (
 	"time"
 )
 
+// RedisConfig redis config
 type RedisConfig struct {
-	MaxIdle int
-	MaxActive int
+	MaxIdle     int
+	MaxActive   int
 	IdleTimeout time.Duration
-	RedisAddr string
-	RedisPass string
+	RedisAddr   string
+	RedisPass   string
 }
 
-
+// RedisConn redisconn pool
 var RedisConn *redis.Pool
 
-
+// Check check
 func (rc *RedisConfig) Check() {}
 
+// InitRedisSdk initsdk
 func InitRedisSdk(cfg *RedisConfig) {
 	RedisConn = &redis.Pool{
 		MaxIdle:     cfg.MaxIdle,
@@ -53,6 +55,7 @@ func pingRedis(c redis.Conn, t time.Time) error {
 	return nil
 }
 
+// CaCheSetEXPIRE expire
 func CaCheSetEXPIRE(key string, data interface{}, time int64) (bool, error) {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -65,6 +68,7 @@ func CaCheSetEXPIRE(key string, data interface{}, time int64) (bool, error) {
 	return reply, err
 }
 
+// CaCheSet set
 func CaCheSet(key string, data interface{}) (string, error) {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -79,6 +83,7 @@ func CaCheSet(key string, data interface{}) (string, error) {
 	return reply, nil
 }
 
+// CaCheReSet reset
 func CaCheReSet(key string, data interface{}, time ...int) (string, error) {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -104,6 +109,7 @@ func CaCheReSet(key string, data interface{}, time ...int) (string, error) {
 	return reply, err
 }
 
+// CacheExists exist
 func CacheExists(key string) bool {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -114,6 +120,7 @@ func CacheExists(key string) bool {
 	return exists
 }
 
+// CacheGet get
 func CacheGet(key string) ([]byte, error) {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -124,6 +131,7 @@ func CacheGet(key string) ([]byte, error) {
 	return reply, nil
 }
 
+// CacheLikeGet like get
 func CacheLikeGet(key string) ([]string, error) {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -134,12 +142,14 @@ func CacheLikeGet(key string) ([]string, error) {
 	return keys, nil
 }
 
+// CacheDelete delete
 func CacheDelete(key string) (bool, error) {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
 	return redis.Bool(rediscn.Do("DEL", key))
 }
 
+// CacheLikeDeletes delete
 func CacheLikeDeletes(key string) error {
 	rediscn := RedisConn.Get()
 	defer rediscn.Close()
@@ -156,6 +166,7 @@ func CacheLikeDeletes(key string) error {
 	return nil
 }
 
+// CloseRedis close conn
 func CloseRedis() {
 	RedisConn.Close()
 }

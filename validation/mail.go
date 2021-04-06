@@ -17,6 +17,7 @@ func VerifyEmailFormat(email string) bool {
 	return emailRegexp.MatchString(email)
 }
 
+// MailDropHasSuffix mail drop has suffix
 func MailDropHasSuffix(mail string) string {
 	if strings.Contains(mail, "@") {
 		return strings.Split(mail, "@")[0]

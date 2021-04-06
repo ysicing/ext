@@ -5,8 +5,8 @@ package validation
 
 import "fmt"
 
-// ValidationName 校验团队名或者项目名
-func ValidationName(name string) error {
+// CheckName 校验是否符合DNS规范
+func CheckName(name string) error {
 	res := IsDNS1123Label(name)
 	if len(res) != 0 {
 		return fmt.Errorf(res[0])

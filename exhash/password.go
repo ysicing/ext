@@ -13,6 +13,7 @@ func CryptoPass(salt, raw string) string {
 	return MD5(salt + "<-*Uk30^96eY*->" + raw)
 }
 
-func GenUUIDForUser(username string) string {
-	return MD5(username + fmt.Sprint(time.Now().UnixNano()))
+// GenUUIDByStr genuuid str
+func GenUUIDByStr(str string) string {
+	return MD5(str + fmt.Sprint(time.Now().UnixNano()))
 }

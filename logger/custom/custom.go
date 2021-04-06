@@ -22,6 +22,7 @@ func getLogFilePath(svcname, logname string) (logpath string) {
 	return fmt.Sprintf("%s/%s", logpath, logname)
 }
 
+// ReadLogs read logs
 func ReadLogs(svcname, logname string) (logs []map[string]interface{}, err error) {
 	logpath := getLogFilePath(svcname, logname)
 	file, err := os.Open(logpath)
@@ -44,6 +45,7 @@ func ReadLogs(svcname, logname string) (logs []map[string]interface{}, err error
 	return logs, nil
 }
 
+// WriteLogs write logs
 func WriteLogs(svcname, logname, msg string) (err error) {
 	logpath := getLogFilePath(svcname, logname)
 	file, err := os.OpenFile(logpath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0777)

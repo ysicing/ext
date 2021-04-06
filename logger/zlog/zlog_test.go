@@ -20,7 +20,7 @@ func _warnHook() func(entry zapcore.Entry) error {
 	}
 }
 
-func TestInitZlog(t *testing.T)  {
+func TestInitZlog(t *testing.T) {
 	hookfunc := append([]func(entry zapcore.Entry) error{}, _warnHook())
 	logcfg := Config{Simple: true, ServiceName: "harbor-monitor", HookFunc: hookfunc}
 	InitZlog(&logcfg)
