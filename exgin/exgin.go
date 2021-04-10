@@ -9,7 +9,7 @@ import (
 	"github.com/ysicing/ext/file"
 	"github.com/ysicing/ext/gerr"
 	"github.com/ysicing/ext/logger/zlog"
-	"github.com/ysicing/ext/misc"
+	"github.com/ysicing/ext/color"
 	"github.com/ysicing/ext/zos"
 	"github.com/ysicing/ext/ztime"
 	"net"
@@ -70,11 +70,11 @@ func ExLog() gin.HandlerFunc {
 			zlog.Warn("[msg] api %v query %v", path, latency)
 		}
 		if len(c.Errors) > 0 || c.Writer.Status() >= 500 {
-			msg := fmt.Sprintf("requestid %v => %v | %v | %v | %v | %v | %v <= err: %v", GetRID(c), misc.SRed("%v", c.Writer.Status()), c.ClientIP(), c.Request.Method, path, query, latency, c.Errors.String())
+			msg := fmt.Sprintf("requestid %v => %v | %v | %v | %v | %v | %v <= err: %v", GetRID(c), color.SRed("%v", c.Writer.Status()), c.ClientIP(), c.Request.Method, path, query, latency, c.Errors.String())
 			zlog.Warn(msg)
 			go file.Writefile(fmt.Sprintf("/tmp/%v.errreq.txt", ztime.NowDay()), msg)
 		} else {
-			zlog.Info("requestid %v => %v | %v | %v | %v | %v | %v ", GetRID(c), misc.SGreen("%v", c.Writer.Status()), c.ClientIP(), c.Request.Method, path, query, latency)
+			zlog.Info("requestid %v => %v | %v | %v | %v | %v | %v ", GetRID(c), color.SGreen("%v", c.Writer.Status()), c.ClientIP(), c.Request.Method, path, query, latency)
 		}
 	}
 }
