@@ -65,7 +65,7 @@ func (c *Config) getEncoder(enablejson bool) zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
-// logfilesyncer log syncer
+// logfilesyncer exlog syncer
 func (c *Config) logfilesyncer(lvl ...string) zapcore.WriteSyncer {
 	var wss []zapcore.WriteSyncer
 	if c.Simple {
@@ -100,7 +100,7 @@ func (c *Config) getLogConfig() *WriteConfig {
 		if zos.IsMacOS() {
 			logcfg.LogPath = fmt.Sprintf("/tmp/%v/%v", c.svcname(), ztime.NowDay())
 		} else {
-			logcfg.LogPath = fmt.Sprintf("/var/log/%v/%v", c.svcname(), ztime.NowDay())
+			logcfg.LogPath = fmt.Sprintf("/var/exlog/%v/%v", c.svcname(), ztime.NowDay())
 		}
 	}
 	if logcfg.MaxAge <= defaultMaxAge {
@@ -119,9 +119,9 @@ func (c *Config) getLogWriter(loglevel ...string) zapcore.WriteSyncer {
 	logcfg := c.getLogConfig()
 	var logpath string
 	if len(loglevel) > 0 {
-		logpath = fmt.Sprintf("%v/%v.log", logcfg.LogPath, loglevel[0])
+		logpath = fmt.Sprintf("%v/%v.exlog", logcfg.LogPath, loglevel[0])
 	} else {
-		logpath = fmt.Sprintf("%v.log", logcfg.LogPath)
+		logpath = fmt.Sprintf("%v.exlog", logcfg.LogPath)
 	}
 
 	lumberJackLogger := &lumberjack.Logger{

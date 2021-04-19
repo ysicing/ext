@@ -6,9 +6,9 @@ package zlog
 import "go.uber.org/zap"
 
 var (
-	// Log log
+	// Log exlog
 	Log *zap.Logger
-	// Zlog log sugar
+	// Zlog exlog sugar
 	Zlog *zap.SugaredLogger
 )
 

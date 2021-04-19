@@ -1,7 +1,7 @@
 // AGPL License
 // Copyright (c) 2021 ysicing <i@ysicing.me>
 
-package exgin
+package engine
 
 import (
 	"fmt"
@@ -9,13 +9,6 @@ import (
 	"github.com/ysicing/ext/gerr"
 	"strconv"
 )
-
-const headerXRequestID = "X-Request-ID"
-
-// GetRID 获取ID
-func GetRID(c *gin.Context) string {
-	return c.Writer.Header().Get(headerXRequestID)
-}
 
 // Bind bind
 func Bind(c *gin.Context, ptr interface{}) {

@@ -1,10 +1,14 @@
 // AGPL License
 // Copyright (c) 2021 ysicing <i@ysicing.me>
 
-package ztime
+package holiday
 
-import "github.com/6tail/lunar-go/HolidayUtil"
+import (
+	"github.com/6tail/lunar-go/HolidayUtil"
+	"github.com/ysicing/ext/ztime"
+)
 
+// Holiday day
 type Holiday struct {
 	Day       string `json:"day"`
 	IsTiaoxiu bool   `json:"is_tiaoxiu"`
@@ -12,12 +16,13 @@ type Holiday struct {
 	NeedWork  bool   `json:"need_work"`
 }
 
-func HolidayGet(day string) Holiday {
+// Get get
+func Get(day string) Holiday {
 	var h Holiday
 	d := HolidayUtil.GetHoliday(day)
 	h.Day = day
 	if d == nil {
-		t, _ := TimeParse("2006-01-02", day)
+		t, _ := ztime.TimeParse("2006-01-02", day)
 		week := int(t.Weekday())
 		if week == 0 || week == 7 || week == 6 {
 			h.NeedWork = false

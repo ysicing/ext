@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-const logprefix = "/var/log"
+const logprefix = "/var/exlog"
 
 func getLogFilePath(svcname, logname string) (logpath string) {
 	if zos.IsLinux() {
